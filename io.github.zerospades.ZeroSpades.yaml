@@ -2,10 +2,9 @@ app-id: io.github.zerospades.ZeroSpades
 runtime: org.freedesktop.Platform
 runtime-version: "25.08"
 sdk: org.freedesktop.Sdk
-command: openspades
-rename-desktop-file: openspades.desktop
-rename-icon: openspades
-rename-appdata-file: jp.yvt.OpenSpades.appdata.xml
+command: zerospades
+rename-desktop-file: zerospades.desktop
+rename-icon: zerospades
 finish-args:
   - --share=ipc
   - --socket=x11
@@ -31,22 +30,20 @@ modules:
   - name: zerospades
     buildsystem: cmake-ninja
     config-opts:
-      - -DOPENSPADES_INSTALL_BINARY=bin
-      - -DOPENSPADES_RESDIR=/app/extra/Resources/
+      - -DZEROSPADES_INSTALL_BINARY=bin
+      - -DZEROSPADES_RESDIR=/app/extra/Resources/
       - -DCMAKE_CXX_FLAGS=-DGLEW_NO_GLU
       - -DCMAKE_BUILD_TYPE=RelWithDebInfo
       - -DCMAKE_POLICY_VERSION_MINIMUM=3.5
       - -DCMAKE_EXE_LINKER_FLAGS=-lcurl
-      - -DOPENSPADES_NONFREE_RESOURCES=OFF
+      - -DZEROSPADES_NONFREE_RESOURCES=OFF
     post-install:
-      - desktop-file-edit --set-key=Name --set-value="ZeroSpades" /app/share/applications/openspades.desktop
-      - install -Dm0644 flatpak/jp.yvt.OpenSpades.appdata.xml -t /app/share/metainfo/
+      - install -Dm0644 flatpak/io.github.zerospades.ZeroSpades.metainfo.xml -t /app/share/metainfo/
       - install -Dm755 apply_extra /app/bin/apply_extra
     sources:
       - type: git
         url: https://github.com/zerospades/zerospades
-        tag: v0.0.8
-        commit: 5dad2da8dcffd788c2a0b54f7fe472677fa85b43
+        commit: 8a506a0f182ccd53ed914ca961a32f5b27d7fc45 
       - type: script
         dest-filename: apply_extra
         commands:
@@ -56,8 +53,6 @@ modules:
           - mv Nonfree/* ./Resources
           - mv OfficialMods/* ./Resources
           - rmdir Nonfree OfficialMods
-      - type: patch
-        path: metainfo.patch
       - type: extra-data
         filename: nonfree-paks.zip
         url: https://github.com/yvt/openspades-paks/releases/download/r33/OpenSpadesDevPackage-r33.zip
